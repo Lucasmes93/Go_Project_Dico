@@ -49,3 +49,6 @@ func main() {
 	if ok {
 		fmt.Println("Définition de 'chat':", definition)
 	}
+
+	// Supprimez un mot
+	d.Remove("oiseau")
