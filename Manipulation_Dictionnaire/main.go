@@ -42,4 +42,4 @@ func main() {
 	// Ajoutez des mots et des définitions
 	d.Add("chat", "Un animal domestique à quatre pattes.")
 	d.Add("chien", "Un autre animal domestique à quatre pattes.")
-	d.Add("oiseau", "Un animal volant.")
+	d.Add("oiseau", "Un animal volant ayant deux pattes.")
