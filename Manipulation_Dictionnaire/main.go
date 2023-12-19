@@ -52,3 +52,10 @@ func main() {
 
 	// Supprimez un mot
 	d.Remove("oiseau")
+
+	// Obtenez la liste triée des mots
+	words := d.List()
+	for _, word := range words {
+		fmt.Println(word)
+	}
+}
