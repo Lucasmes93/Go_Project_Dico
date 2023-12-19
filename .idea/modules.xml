@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Go_Project_Dico.iml" filepath="$PROJECT_DIR$/.idea/Go_Project_Dico.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/go_project_dico.iml" filepath="$PROJECT_DIR$/.idea/go_project_dico.iml" />
     </modules>
   </component>
 </project>
