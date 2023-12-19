@@ -2,6 +2,14 @@
 
 Un simple programme Go représentant un dictionnaire avec des opérations de base telles que l'ajout de mots, la récupération de définitions, la suppression de mots et la liste triée des mots.
 
+#Le projet est organisé en plusieurs composants :
+
+- **manipulation_dictionnaire**: Ce répertoire contient le package qui gère la manipulation du dictionnaire.
+  - **dico.go**: Ce fichier définit le type Dictionary et ses méthodes pour ajouter, récupérer, supprimer et lister des mots avec leurs définitions.
+
+- **main**: Ce répertoire contient l'application principale.
+  - **main.go**: Ce fichier utilise le package manipulation_dictionnaire pour interagir avec le dictionnaire, en ajoutant des mots, récupérant des définitions, supprimant des mots et listant le dictionnaire.
+
 ## Utilisation
 
 1. **Créez un nouveau dictionnaire :**
