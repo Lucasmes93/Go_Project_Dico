@@ -50,9 +50,9 @@ Ce programme en Go propose une implémentation simple d'un dictionnaire avec des
 d := NewDictionary()
 
 // Ajoutez des mots et des définitions
-d.Add("chat", "Un animal domestique à quatre pattes.")
-d.Add("chien", "Un autre animal domestique à quatre pattes.")
-d.Add("oiseau", "Un animal volant.")
+	d.Add("chat", "Mammifère carnivore (félidé), sauvage ou domestique, au museau court et arrondi.")
+	d.Add("chien", "Mammifère (canidé) carnivore aux multiples races, caractérisé par sa facilité à être domestiqué, par une course rapide, un excellent odorat et par son cri spécifique, l'aboiement.")
+	d.Add("oiseau", "Vertébré ovipare, couvert de plumes et d'écailles cornées, à respiration pulmonaire, homéotherme, aux mâchoires sans dents revêtues d'un bec corné, et aux membres antérieurs, ou ailes, normalement adaptés au vol.")
 
 // Obtenez la définition d'un mot
 definition, ok := d.Get("chat")
