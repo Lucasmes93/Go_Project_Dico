@@ -2,40 +2,39 @@ package main
 
 import (
 	"fmt"
-	"maps"
+	"sort"
 )
 
-func main() {
-
-	m := make(map[string]int)
-
-	m["k1"] = 7
-	m["k2"] = 13
-
-	fmt.Println("map:", m)
-
-	v1 := m["k1"]
-	fmt.Println("v1:", v1)
-
-	v3 := m["k3"]
-	fmt.Println("v3:", v3)
-
-	fmt.Println("len:", len(m))
-
-	delete(m, "k2")
-	fmt.Println("map:", m)
-
-	clear(m)
-	fmt.Println("map:", m)
-
-	_, prs := m["k2"]
-	fmt.Println("prs:", prs)
-
-	n := map[string]int{"foo": 1, "bar": 2}
-	fmt.Println("map:", n)
-
-	n2 := map[string]int{"foo": 1, "bar": 2}
-	if maps.Equal(n, n2) {
-		fmt.Println("n == n2")
-	}
+type Dictionary struct {
+	m map[string]string
 }
+
+func NewDictionary() Dictionary {
+	return Dictionary{m: make(map[string]string)}
+}
+
+func (d *Dictionary) Add(word, definition string) {
+	d.m[word] = definition
+}
+
+func (d *Dictionary) Get(word string) (string, bool) {
+	definition, ok := d.m[word]
+	return definition, ok
+}
+
+func (d *Dictionary) Remove(word string) {
+	delete(d.m, word)
+}
+
+func (d *Dictionary) List() []string {
+	var words []string
+	for word := range d.m {
+		words = append(words, word)
+	}
+	sort.Strings(words)
+	return words
+}
+
+func main() {
+	// Créez un nouveau dictionnaire
+	d := NewDictionary()
