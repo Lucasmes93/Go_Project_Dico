@@ -13,3 +13,9 @@ type Dictionary struct {
 func NewDictionary(filePath string) *Dictionary {
 	return &Dictionary{FilePath: filePath}
 }
+
+func (d *Dictionary) Add(word, definition string) error {
+	entry := Entry{Word: word, Definition: definition}
+	d.Entries = append(d.Entries, entry)
+	return d.saveToFile()
+}
