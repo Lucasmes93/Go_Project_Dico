@@ -36,6 +36,9 @@ func main() {
 	words, err := d.List()
 	handleError(err, "Erreur lors de la récupération de la liste")
 	fmt.Println("Mots restants:", words)
+
+	// Attendre la fin des opérations avant de terminer le programme
+	time.Sleep(2 * time.Second)
 }
 
 func handleError(err error, message string) {
