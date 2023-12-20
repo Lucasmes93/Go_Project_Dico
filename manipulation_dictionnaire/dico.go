@@ -77,8 +77,9 @@ func (d *Dictionary) List() ([]string, error) {
 	}
 	sort.Strings(words)
 	return words, nil
+}
 
-} // saveToFile sauvegarde les entrées du dictionnaire dans un fichier JSON.
+// saveToFile sauvegarde les entrées du dictionnaire dans un fichier JSON.
 func (d *Dictionary) saveToFile() {
 	jsonData, err := json.MarshalIndent(d.Entries, "", "  ")
 	if err != nil {
