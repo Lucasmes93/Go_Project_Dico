@@ -68,4 +68,3 @@ Les contributions sont les bienvenues ! Si vous souhaitez améliorer ce projet, 
 ## Auteur
 
 - [MESSIA DOLIVEUX Lucas]
-```
