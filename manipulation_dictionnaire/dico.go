@@ -27,3 +27,13 @@ func (d *Dictionary) Get(word string) (string, bool) {
 	}
 	return "", false
 }
+func (d *Dictionary) Remove(word string) error {
+	var newEntries []Entry
+	for _, entry := range d.Entries {
+		if entry.Word != word {
+			newEntries = append(newEntries, entry)
+		}
+	}
+	d.Entries = newEntries
+	return d.saveToFile()
+}
