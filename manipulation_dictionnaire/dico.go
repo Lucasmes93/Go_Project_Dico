@@ -1,4 +1,4 @@
-package manipulation_dictionnaire
+package dictionary
 
 import (
 	"encoding/json"
@@ -6,25 +6,31 @@ import (
 	"sort"
 )
 
+// Entry représente un mot et sa définition.
 type Entry struct {
 	Word       string `json:"word"`
 	Definition string `json:"definition"`
 }
 
+// Dictionary représente un dictionnaire avec un chemin de fichier et des entrées.
 type Dictionary struct {
 	FilePath string
 	Entries  []Entry
 }
 
+// NewDictionary crée une nouvelle instance de Dictionary avec le chemin du fichier.
 func NewDictionary(filePath string) *Dictionary {
 	return &Dictionary{FilePath: filePath}
 }
 
+// Add ajoute un mot avec sa définition au dictionnaire.
 func (d *Dictionary) Add(word, definition string) error {
 	entry := Entry{Word: word, Definition: definition}
 	d.Entries = append(d.Entries, entry)
 	return d.saveToFile()
 }
+
+// Get récupère la définition d'un mot du dictionnaire.
 func (d *Dictionary) Get(word string) (string, bool) {
 	for _, entry := range d.Entries {
 		if entry.Word == word {
@@ -33,6 +39,8 @@ func (d *Dictionary) Get(word string) (string, bool) {
 	}
 	return "", false
 }
+
+// Remove supprime un mot du dictionnaire.
 func (d *Dictionary) Remove(word string) error {
 	var newEntries []Entry
 	for _, entry := range d.Entries {
@@ -43,6 +51,8 @@ func (d *Dictionary) Remove(word string) error {
 	d.Entries = newEntries
 	return d.saveToFile()
 }
+
+// List renvoie la liste des mots dans le dictionnaire, triés par ordre alphabétique.
 func (d *Dictionary) List() ([]string, error) {
 	var words []string
 	for _, entry := range d.Entries {
@@ -51,6 +61,8 @@ func (d *Dictionary) List() ([]string, error) {
 	sort.Strings(words)
 	return words, nil
 }
+
+// saveToFile sauvegarde les entrées du dictionnaire dans un fichier JSON.
 func (d *Dictionary) saveToFile() error {
 	jsonData, err := json.MarshalIndent(d.Entries, "", "  ")
 	if err != nil {
