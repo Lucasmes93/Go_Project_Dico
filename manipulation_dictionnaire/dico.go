@@ -65,15 +65,8 @@ func (d *Dictionary) Get(word string) (string, bool) {
 }
 
 // Remove supprime un mot du dictionnaire.
-func (d *Dictionary) Remove(word string) error {
-	var newEntries []Entry
-	for _, entry := range d.Entries {
-		if entry.Word != word {
-			newEntries = append(newEntries, entry)
-		}
-	}
-	d.Entries = newEntries
-	return d.saveToFile()
+func (d *Dictionary) Remove(word string) {
+	d.RemoveChan <- word
 }
 
 // List renvoie la liste des mots dans le dictionnaire, triés par ordre alphabétique.
