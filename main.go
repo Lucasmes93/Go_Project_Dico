@@ -20,8 +20,8 @@ func main() {
 		fmt.Println("Mot non trouvé.")
 	}
 
-	// Supprime le mot "oiseau" du dictionnaire
-	d.Remove("oiseau")
+	// Suppression du mot "chien"
+	handleError(d.Remove("chien"), "Erreur lors de la suppression")
 
 	// Récupère la liste alphabétique des mots et les affiche
 	words := d.List()
