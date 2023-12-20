@@ -1,4 +1,4 @@
-package dictionary
+package manipulation_dictionnaire
 
 import (
 	"encoding/json"
