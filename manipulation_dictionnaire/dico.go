@@ -1,5 +1,7 @@
 package manipulation_dictionnaire
 
+import "sort"
+
 type Entry struct {
 	Word       string `json:"word"`
 	Definition string `json:"definition"`
@@ -36,4 +38,12 @@ func (d *Dictionary) Remove(word string) error {
 	}
 	d.Entries = newEntries
 	return d.saveToFile()
+}
+func (d *Dictionary) List() ([]string, error) {
+	var words []string
+	for _, entry := range d.Entries {
+		words = append(words, entry.Word)
+	}
+	sort.Strings(words)
+	return words, nil
 }
