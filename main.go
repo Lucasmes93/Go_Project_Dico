@@ -3,6 +3,7 @@ package main
 import (
 	"Go_Project_Dico/manipulation_dictionnaire"
 	"fmt"
+	"time"
 )
 
 func main() {
@@ -25,8 +26,11 @@ func main() {
 		fmt.Println("Mot non trouvé.")
 	}
 
-	// Suppression du mot "chien"
-	handleError(d.Remove("chien"), "Erreur lors de la suppression")
+	// Suppression du mot "chien" de manière concurrente
+	go func() {
+		time.Sleep(500 * time.Millisecond) // Attendre un peu pour simuler un traitement concurrent
+		handleError(d.Remove("chien"), "Erreur lors de la suppression")
+	}()
 
 	// Liste alphabétique des mots restants
 	words, err := d.List()
