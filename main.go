@@ -23,6 +23,9 @@ func main() {
 		handleError(d.Remove("chien"), "Erreur lors de la suppression")
 	}()
 
+	// Attendre un peu plus longtemps avant de récupérer la définition du mot "chat"
+	time.Sleep(1 * time.Second)
+
 	// Récupération de la définition du mot "chat"
 	definition, ok := d.Get("chat")
 	if ok {
@@ -30,6 +33,13 @@ func main() {
 	} else {
 		fmt.Println("Mot non trouvé.")
 	}
+
+	// Liste alphabétique des mots restants
+	words, err := d.List()
+	if err != nil {
+		handleError(err, "Erreur lors de la récupération de la liste")
+	}
+	fmt.Println("Mots restants:", words)
 
 	// Attendre la fin des opérations avant de terminer le programme
 	time.Sleep(2 * time.Second)
