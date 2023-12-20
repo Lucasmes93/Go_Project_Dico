@@ -19,3 +19,11 @@ func (d *Dictionary) Add(word, definition string) error {
 	d.Entries = append(d.Entries, entry)
 	return d.saveToFile()
 }
+func (d *Dictionary) Get(word string) (string, bool) {
+	for _, entry := range d.Entries {
+		if entry.Word == word {
+			return entry.Definition, true
+		}
+	}
+	return "", false
+}
