@@ -50,8 +50,10 @@ func (d *Dictionary) processOperations() {
 }
 
 // Add ajoute un mot avec sa définition au dictionnaire.
-func (d *Dictionary) Add(word, definition string) {
-	d.AddChan <- Entry{Word: word, Definition: definition}
+func (d *Dictionary) Add(word, definition string) error {
+	entry := Entry{Word: word, Definition: definition}
+	d.AddChan <- entry
+	return nil
 }
 
 // Get récupère la définition d'un mot du dictionnaire.
@@ -65,8 +67,9 @@ func (d *Dictionary) Get(word string) (string, bool) {
 }
 
 // Remove supprime un mot du dictionnaire.
-func (d *Dictionary) Remove(word string) {
+func (d *Dictionary) Remove(word string) error {
 	d.RemoveChan <- word
+	return nil
 }
 
 // List renvoie la liste des mots dans le dictionnaire, triés par ordre alphabétique.
