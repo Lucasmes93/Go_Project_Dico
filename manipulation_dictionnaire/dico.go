@@ -50,10 +50,8 @@ func (d *Dictionary) processOperations() {
 }
 
 // Add ajoute un mot avec sa définition au dictionnaire.
-func (d *Dictionary) Add(word, definition string) error {
-	entry := Entry{Word: word, Definition: definition}
-	d.Entries = append(d.Entries, entry)
-	return d.saveToFile()
+func (d *Dictionary) Add(word, definition string) {
+	d.AddChan <- Entry{Word: word, Definition: definition}
 }
 
 // Get récupère la définition d'un mot du dictionnaire.
