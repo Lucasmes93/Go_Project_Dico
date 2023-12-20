@@ -6,18 +6,15 @@ import (
 	"net/http"
 )
 
-func main() {
-	// Initialisez votre dictionnaire
-	dictionary := manipulation_dictionnaire.NewDictionary()
+const port = 8080
 
-	// Configurez les routes
+func main() {
+	dictionary := manipulation_dictionnaire.NewDictionary()
 	manipulation_dictionnaire.SetupRoutes(dictionary)
 
-	// Démarrer le serveur sur le port 8080
-	port := 8080
 	fmt.Printf("Serveur en cours d'exécution sur le port %d...\n", port)
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
-	if err != nil {
-		fmt.Println("Erreur lors du démarrage du serveur:", err)
+
+	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
+		fmt.Printf("Erreur lors du démarrage du serveur: %s\n", err)
 	}
 }
