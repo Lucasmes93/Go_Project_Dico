@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	// Crée un nouveau dictionnaire
-	d := manipulation_dictionnaire.NewDictionary()
+	filePath := "dictionary.json"
+	d := manipulation_dictionnaire.NewDictionary(filePath)
 
 	// Ajoute des mots et leurs définitions au dictionnaire
 	d.Add("chat", "Mammifère carnivore (félidé), sauvage ou domestique, au museau court et arrondi.")
