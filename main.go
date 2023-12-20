@@ -17,6 +17,14 @@ func main() {
 		handleError(d.Add("oiseau", "Vertébré ovipare, couvert de plumes et d'écailles cornées, à respiration pulmonaire, homéotherme, aux mâchoires sans dents revêtues d'un bec corné, et aux membres antérieurs, ou ailes, normalement adaptés au vol."), "Erreur lors de l'ajout")
 	}()
 
+	// Récupération de la définition du mot "chat"
+	definition, ok := d.Get("chat")
+	if ok {
+		fmt.Println("Définition de 'chat':", definition)
+	} else {
+		fmt.Println("Mot non trouvé.")
+	}
+
 	// Suppression du mot "chien" de manière concurrente
 	go func() {
 		time.Sleep(500 * time.Millisecond) // Attendre un peu pour simuler un traitement concurrent
@@ -25,14 +33,6 @@ func main() {
 
 	// Attendre un peu plus longtemps avant de récupérer la définition du mot "chat"
 	time.Sleep(1 * time.Second)
-
-	// Récupération de la définition du mot "chat"
-	definition, ok := d.Get("chat")
-	if ok {
-		fmt.Println("Définition de 'chat':", definition)
-	} else {
-		fmt.Println("Mot non trouvé.")
-	}
 
 	// Liste alphabétique des mots restants
 	words, err := d.List()

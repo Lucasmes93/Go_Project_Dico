@@ -1,15 +1,16 @@
 
 # Projet Dictionnaire en Go
 
-Ce projet implémente un programme en Go permettant la manipulation d'un dictionnaire stocké dans un fichier JSON. Le dictionnaire peut être utilisé pour ajouter des mots avec leurs définitions, récupérer les définitions des mots, supprimer des mots, et lister les mots restants par ordre alphabétique.
+Ce projet a pour objectif de fournir un programme en Go permettant la manipulation d'un dictionnaire stocké dans un fichier JSON. Le dictionnaire offre des fonctionnalités telles que l'ajout de mots avec leurs définitions, la récupération des définitions, la suppression de mots et la liste alphabétique des mots restants.
 
 ## Structure du Projet
 
-- **main.go**: Le fichier principal qui contient la fonction `main` du programme.
-
-- **manipulation_dictionnaire**: Un package personnalisé contenant les fonctionnalités de manipulation du dictionnaire.
-
-- **dictionary.json**: Le fichier JSON dans lequel le dictionnaire est stocké.
+- **main.go**: Le fichier principal contenant la fonction `main` du programme.
+  - Initialise le dictionnaire, effectue des opérations concurrentes et démontre l'utilisation des fonctionnalités.
+- **manipulation_dictionnaire**: Un package personnalisé contenant la logique de manipulation du dictionnaire.
+  - **Entry** : Structure représentant un mot et sa définition.
+  - **Dictionary** : Structure représentant le dictionnaire avec des opérations telles que l'ajout, la suppression, la récupération et la liste.
+- **dictionary.json**: Le fichier JSON dans lequel le dictionnaire est persisté.
 
 ## Fonctionnalités
 
