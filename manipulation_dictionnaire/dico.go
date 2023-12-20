@@ -1,6 +1,10 @@
 package manipulation_dictionnaire
 
-import "sort"
+import (
+	"encoding/json"
+	"io/ioutil"
+	"sort"
+)
 
 type Entry struct {
 	Word       string `json:"word"`
@@ -46,4 +50,12 @@ func (d *Dictionary) List() ([]string, error) {
 	}
 	sort.Strings(words)
 	return words, nil
+}
+func (d *Dictionary) saveToFile() error {
+	jsonData, err := json.MarshalIndent(d.Entries, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	return ioutil.WriteFile(d.FilePath, jsonData, 0644)
 }
