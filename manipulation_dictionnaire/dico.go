@@ -14,13 +14,39 @@ type Entry struct {
 
 // Dictionary représente un dictionnaire avec un chemin de fichier et des entrées.
 type Dictionary struct {
-	FilePath string
-	Entries  []Entry
+	FilePath   string
+	Entries    []Entry
+	AddChan    chan Entry
+	RemoveChan chan string
 }
 
 // NewDictionary crée une nouvelle instance de Dictionary avec le chemin du fichier.
 func NewDictionary(filePath string) *Dictionary {
-	return &Dictionary{FilePath: filePath}
+	d := &Dictionary{
+		FilePath:   filePath,
+		AddChan:    make(chan Entry),
+		RemoveChan: make(chan string),
+	}
+	go d.processOperations()
+	return d
+}
+
+func (d *Dictionary) processOperations() {
+	for {
+		select {
+		case entry := <-d.AddChan:
+			d.Entries = append(d.Entries, entry)
+		case word := <-d.RemoveChan:
+			var newEntries []Entry
+			for _, entry := range d.Entries {
+				if entry.Word != word {
+					newEntries = append(newEntries, entry)
+				}
+			}
+			d.Entries = newEntries
+		}
+		d.saveToFile()
+	}
 }
 
 // Add ajoute un mot avec sa définition au dictionnaire.
