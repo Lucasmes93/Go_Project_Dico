@@ -2,92 +2,113 @@ package manipulation_dictionnaire
 
 import (
 	"encoding/json"
-	"io/ioutil"
-	"sort"
+	"net/http"
+	"sync"
 )
 
-// Entry représente un mot et sa définition.
-type Entry struct {
-	Word       string `json:"word"`
-	Definition string `json:"definition"`
-}
-
-// Dictionary représente un dictionnaire avec un chemin de fichier et des entrées.
+// Dictionary struct représente votre dictionnaire
 type Dictionary struct {
-	FilePath   string
-	Entries    []Entry
-	AddChan    chan Entry
-	RemoveChan chan string
+	entries map[string]string
+	mu      sync.RWMutex
 }
 
-// NewDictionary crée une nouvelle instance de Dictionary avec le chemin du fichier.
-func NewDictionary(filePath string) *Dictionary {
-	d := &Dictionary{
-		FilePath:   filePath,
-		AddChan:    make(chan Entry),
-		RemoveChan: make(chan string),
-	}
-	go d.processOperations()
-	return d
-}
-
-func (d *Dictionary) processOperations() {
-	for {
-		select {
-		case entry := <-d.AddChan:
-			d.Entries = append(d.Entries, entry)
-		case word := <-d.RemoveChan:
-			var newEntries []Entry
-			for _, entry := range d.Entries {
-				if entry.Word != word {
-					newEntries = append(newEntries, entry)
-				}
-			}
-			d.Entries = newEntries
-		}
-		d.saveToFile()
+// NewDictionary initialise un nouveau dictionnaire
+func NewDictionary() *Dictionary {
+	return &Dictionary{
+		entries: make(map[string]string),
 	}
 }
 
-// Add ajoute un mot avec sa définition au dictionnaire.
-func (d *Dictionary) Add(word, definition string) error {
-	entry := Entry{Word: word, Definition: definition}
-	d.AddChan <- entry
-	return nil
-}
-
-// Get récupère la définition d'un mot du dictionnaire.
-func (d *Dictionary) Get(word string) (string, bool) {
-	for _, entry := range d.Entries {
-		if entry.Word == word {
-			return entry.Definition, true
-		}
-	}
-	return "", false
-}
-
-// Remove supprime un mot du dictionnaire.
-func (d *Dictionary) Remove(word string) error {
-	d.RemoveChan <- word
-	return nil
-}
-
-// List renvoie la liste des mots dans le dictionnaire, triés par ordre alphabétique.
-func (d *Dictionary) List() ([]string, error) {
-	var words []string
-	for _, entry := range d.Entries {
-		words = append(words, entry.Word)
-	}
-	sort.Strings(words)
-	return words, nil
-}
-
-// saveToFile sauvegarde les entrées du dictionnaire dans un fichier JSON.
-func (d *Dictionary) saveToFile() {
-	jsonData, err := json.MarshalIndent(d.Entries, "", "  ")
-	if err != nil {
-		// Gestion de l'erreur (par exemple, log ou fmt)
+// Add permet d'ajouter une entrée au dictionnaire (Route: /add)
+func (d *Dictionary) Add(w http.ResponseWriter, r *http.Request) {
+	// Assurez-vous que la méthode de la requête est POST
+	if r.Method != http.MethodPost {
+		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
-	ioutil.WriteFile(d.FilePath, jsonData, 0644)
+
+	// Exemple : Parsez le corps de la requête pour obtenir les données
+	var entry map[string]string
+	err := json.NewDecoder(r.Body).Decode(&entry)
+	if err != nil {
+		http.Error(w, "Erreur lors de la lecture du corps de la requête", http.StatusBadRequest)
+		return
+	}
+
+	// Ajoutez la nouvelle entrée au dictionnaire
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	d.entries[entry["mot"]] = entry["definition"]
+
+	// Répondez avec un statut de succès
+	w.WriteHeader(http.StatusCreated)
+}
+
+// Get permet de récupérer une définition par mot (Route: /get)
+func (d *Dictionary) Get(w http.ResponseWriter, r *http.Request) {
+	// Assurez-vous que la méthode de la requête est GET
+	if r.Method != http.MethodGet {
+		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Exemple : Obtenez le mot à partir des paramètres de requête
+	word := r.URL.Query().Get("mot")
+
+	// Obtenez la définition du mot à partir du dictionnaire
+	d.mu.RLock()
+	defer d.mu.RUnlock()
+	definition, exists := d.entries[word]
+	if !exists {
+		http.Error(w, "Mot non trouvé", http.StatusNotFound)
+		return
+	}
+
+	// Répondez avec la définition du mot
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"mot": word, "definition": definition})
+}
+
+// Remove permet de supprimer une entrée par mot (Route: /remove)
+func (d *Dictionary) Remove(w http.ResponseWriter, r *http.Request) {
+	// Assurez-vous que la méthode de la requête est DELETE
+	if r.Method != http.MethodDelete {
+		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Exemple : Obtenez le mot à partir des paramètres de requête
+	word := r.URL.Query().Get("mot")
+
+	// Supprimez l'entrée du dictionnaire
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	delete(d.entries, word)
+
+	// Répondez avec un statut de succès
+	w.WriteHeader(http.StatusOK)
+}
+
+// List permet d'afficher tous les éléments du dictionnaire (Route: /list)
+func (d *Dictionary) List(w http.ResponseWriter, r *http.Request) {
+	// Assurez-vous que la méthode de la requête est GET
+	if r.Method != http.MethodGet {
+		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Obtenez la liste complète des entrées du dictionnaire
+	d.mu.RLock()
+	defer d.mu.RUnlock()
+
+	// Construisez une liste de paires mot-définition
+	var entries []map[string]string
+	for word, definition := range d.entries {
+		entry := map[string]string{"mot": word, "definition": definition}
+		entries = append(entries, entry)
+	}
+
+	// Répondez avec la liste complète au format JSON
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(entries)
 }
