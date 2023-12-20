@@ -1,51 +1,82 @@
-# Dictionary Go
+Bien sûr, voici une version plus complète du fichier README pour votre projet en Go :
 
-Un simple programme Go représentant un dictionnaire avec des opérations de base telles que l'ajout de mots, la récupération de définitions, la suppression de mots et la liste triée des mots.
+```markdown
+# Projet Dictionnaire en Go
 
-#Le projet est organisé en plusieurs composants :
+Ce projet implémente un programme en Go permettant la manipulation d'un dictionnaire stocké dans un fichier JSON. Le dictionnaire peut être utilisé pour ajouter des mots avec leurs définitions, récupérer les définitions des mots, supprimer des mots, et lister les mots restants par ordre alphabétique.
 
-- **manipulation_dictionnaire**: Ce répertoire contient le package qui gère la manipulation du dictionnaire.
-  - **dico.go**: Ce fichier définit le type Dictionary et ses méthodes pour ajouter, récupérer, supprimer et lister des mots avec leurs définitions.
+## Structure du Projet
 
-- **main**: Ce répertoire contient l'application principale.
-  - **main.go**: Ce fichier utilise le package manipulation_dictionnaire pour interagir avec le dictionnaire, en ajoutant des mots, récupérant des définitions, supprimant des mots et listant le dictionnaire.
+- **main.go**: Le fichier principal qui contient la fonction `main` du programme.
 
-## Utilisation
+- **manipulation_dictionnaire**: Un package personnalisé contenant les fonctionnalités de manipulation du dictionnaire.
 
-1. **Créez un nouveau dictionnaire :**
-   ```go
-   d := NewDictionary()
+- **dictionary.json**: Le fichier JSON dans lequel le dictionnaire est stocké.
+
+## Fonctionnalités
+
+### Ajout d'un Mot et d'une Définition
+
+Utilisez la méthode `Add` du dictionnaire pour ajouter un mot avec sa définition.
+
+```go
+handleError(d.Add("chat", "Mammifère carnivore (félidé), sauvage ou domestique, au museau court et arrondi."), "Erreur lors de l'ajout")
+```
+
+### Récupération de la Définition d'un Mot
+
+Utilisez la méthode `Get` pour récupérer la définition d'un mot.
+
+```go
+definition, ok := d.Get("chat")
+if ok {
+    fmt.Println("Définition de 'chat':", definition)
+} else {
+    fmt.Println("Mot non trouvé.")
+}
+```
+
+### Suppression d'un Mot
+
+Utilisez la méthode `Remove` pour supprimer un mot du dictionnaire.
+
+```go
+handleError(d.Remove("chien"), "Erreur lors de la suppression")
+```
+
+### Liste Alphabétique des Mots Restants
+
+Utilisez la méthode `List` pour obtenir une liste alphabétique des mots restants.
+
+```go
+words, err := d.List()
+handleError(err, "Erreur lors de la récupération de la liste")
+fmt.Println("Mots restants:", words)
+```
+
+## Installation et Utilisation
+
+1. **Prérequis**: Assurez-vous que Go est installé sur votre système. Si ce n'est pas le cas, suivez les instructions d'installation sur [golang.org](https://golang.org/doc/install).
+
+2. **Clonage du Dépôt**:
+   ```bash
+   git clone https://github.com/Lucasmes93/Go_Project_Dico.git
    ```
 
-2. **Ajoutez des mots et des définitions :**
-   ```go
-   d.Add("chat", "Mammifère carnivore (félidé), sauvage ou domestique, au museau court et arrondi.")
-   d.Add("chien", "Mammifère (canidé) carnivore aux multiples races, caractérisé par sa facilité à être domestiqué, par une course rapide, un excellent odorat et par son cri spécifique, l'aboiement.")
-   d.Add("oiseau", "Vertébré ovipare, couvert de plumes et d'écailles cornées, à respiration pulmonaire, homéotherme, aux mâchoires sans dents revêtues d'un bec corné, et aux membres antérieurs, ou ailes, normalement adaptés au vol.")
+3. **Navigation dans le Répertoire du Projet**:
+   ```bash
+   cd Go_Project_Dico
    ```
 
-3. **Obtenez la définition d'un mot :**
-   ```go
-   definition, ok := d.Get("chat")
-   if ok {
-       fmt.Println("Définition de 'chat':", definition)
-   }
+4. **Exécution du Programme**:
+   ```bash
+   go run main.go
    ```
 
-4. **Supprimez un mot :**
-   ```go
-   d.Remove("oiseau")
-   ```
+## Contribuer
 
-5. **Obtenez la liste triée des mots :**
-   ```go
-   words := d.List()
-   for _, word := range words {
-       fmt.Println(word)
-   }
-   ```
+N'hésitez pas à contribuer en ouvrant des issues pour signaler des problèmes ou en proposant des pull requests pour des améliorations. Toute contribution est la bienvenue !
 
-## Structure du Code
+## Auteurs
 
-- `main.go`: Contient le code principal pour utiliser le dictionnaire.
-- `dictionary.go`: Définit le type `Dictionary` et ses méthodes pour les opérations de base.
+- [MESSIA DOLIVEUX Lucas]
