@@ -1,6 +1,4 @@
-Bien sûr, voici une version plus complète du fichier README pour votre projet en Go :
 
-```markdown
 # Projet Dictionnaire en Go
 
 Ce projet implémente un programme en Go permettant la manipulation d'un dictionnaire stocké dans un fichier JSON. Le dictionnaire peut être utilisé pour ajouter des mots avec leurs définitions, récupérer les définitions des mots, supprimer des mots, et lister les mots restants par ordre alphabétique.
@@ -77,6 +75,6 @@ fmt.Println("Mots restants:", words)
 
 N'hésitez pas à contribuer en ouvrant des issues pour signaler des problèmes ou en proposant des pull requests pour des améliorations. Toute contribution est la bienvenue !
 
-## Auteurs
+## Auteur
 
 - [MESSIA DOLIVEUX Lucas]
