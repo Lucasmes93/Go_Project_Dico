@@ -23,9 +23,14 @@ func main() {
 	// Suppression du mot "chien"
 	handleError(d.Remove("chien"), "Erreur lors de la suppression")
 
-	// Récupère la liste alphabétique des mots et les affiche
-	words := d.List()
-	for _, word := range words {
-		fmt.Println(word)
+	// Liste alphabétique des mots restants
+	words, err := d.List()
+	handleError(err, "Erreur lors de la récupération de la liste")
+	fmt.Println("Mots restants:", words)
+}
+
+func handleError(err error, message string) {
+	if err != nil {
+		fmt.Printf("%s: %v\n", message, err)
 	}
 }
