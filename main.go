@@ -17,6 +17,17 @@ func main() {
 		handleError(d.Add("oiseau", "Vertébré ovipare, couvert de plumes et d'écailles cornées, à respiration pulmonaire, homéotherme, aux mâchoires sans dents revêtues d'un bec corné, et aux membres antérieurs, ou ailes, normalement adaptés au vol."), "Erreur lors de l'ajout")
 	}()
 
+	// Suppression du mot "chien" de manière concurrente
+	go func() {
+		time.Sleep(500 * time.Millisecond) // Attendre un peu pour simuler un traitement concurrent
+		if err := d.Remove("chien"); err != nil {
+			handleError(err, "Erreur lors de la suppression")
+		}
+	}()
+
+	// Attente de la fin des opérations
+	time.Sleep(2 * time.Second)
+
 	// Récupération de la définition du mot "chat"
 	definition, ok := d.Get("chat")
 	if ok {
@@ -25,24 +36,12 @@ func main() {
 		fmt.Println("Mot non trouvé.")
 	}
 
-	// Suppression du mot "chien" de manière concurrente
-	go func() {
-		time.Sleep(500 * time.Millisecond) // Attendre un peu pour simuler un traitement concurrent
-		handleError(d.Remove("chien"), "Erreur lors de la suppression")
-	}()
-
-	// Attendre un peu plus longtemps avant de récupérer la définition du mot "chat"
-	time.Sleep(1 * time.Second)
-
 	// Liste alphabétique des mots restants
 	words, err := d.List()
 	if err != nil {
 		handleError(err, "Erreur lors de la récupération de la liste")
 	}
 	fmt.Println("Mots restants:", words)
-
-	// Attendre la fin des opérations avant de terminer le programme
-	time.Sleep(2 * time.Second)
 }
 
 func handleError(err error, message string) {
