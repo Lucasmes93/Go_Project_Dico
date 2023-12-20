@@ -1,31 +1,15 @@
 package manipulation_dictionnaire
 
-import "sort"
-
-type Dictionary map[string]string
-
-func NewDictionary() Dictionary {
-	return make(Dictionary)
+type Entry struct {
+	Word       string `json:"word"`
+	Definition string `json:"definition"`
 }
 
-func (d Dictionary) Add(word, definition string) {
-	d[word] = definition
+type Dictionary struct {
+	FilePath string
+	Entries  []Entry
 }
 
-func (d Dictionary) Get(word string) (string, bool) {
-	definition, ok := d[word]
-	return definition, ok
-}
-
-func (d Dictionary) Remove(word string) {
-	delete(d, word)
-}
-
-func (d Dictionary) List() []string {
-	var words []string
-	for word := range d {
-		words = append(words, word)
-	}
-	sort.Strings(words)
-	return words
+func NewDictionary(filePath string) *Dictionary {
+	return &Dictionary{FilePath: filePath}
 }
