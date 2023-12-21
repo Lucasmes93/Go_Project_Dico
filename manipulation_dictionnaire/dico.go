@@ -3,6 +3,7 @@ package manipulation_dictionnaire
 import (
 	"encoding/json"
 	"net/http"
+	"os"
 	"sync"
 )
 
@@ -112,4 +113,27 @@ func (d *Dictionary) List(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(d.entries)
+}
+
+// ExportToFile exporte la liste des entrées du dictionnaire vers un fichier JSON.
+func (d *Dictionary) ExportToFile(w http.ResponseWriter, r *http.Request) {
+	d.handleMethodNotAllowed(w, r, http.MethodGet)
+
+	// Encode la liste en JSON
+	jsonData, err := json.MarshalIndent(d.entries, "", "  ")
+	if err != nil {
+		http.Error(w, "Erreur lors de l'encodage JSON", http.StatusInternalServerError)
+		return
+	}
+
+	// Écrit le JSON dans un fichier
+	file, err := os.Create("output.json")
+	if err != nil {
+		http.Error(w, "Erreur lors de la création du fichier", http.StatusInternalServerError)
+		return
+	}
+	defer file.Close()
+
+	file.Write(jsonData)
+	w.WriteHeader(http.StatusOK)
 }
