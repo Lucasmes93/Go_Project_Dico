@@ -6,17 +6,26 @@ import (
 	"sync"
 )
 
+// DictionaryEntry représente une entrée de dictionnaire avec un mot et une définition.
+type DictionaryEntry struct {
+	Mot        string `json:"mot"`
+	Definition string `json:"definition"`
+}
+
+// Dictionary est une structure de données représentant un dictionnaire.
 type Dictionary struct {
-	entries map[string]string
+	entries []DictionaryEntry // Utilisation d'une slice au lieu d'une map
 	mu      sync.RWMutex
 }
 
+// NewDictionary crée et retourne une nouvelle instance de Dictionary.
 func NewDictionary() *Dictionary {
 	return &Dictionary{
-		entries: make(map[string]string),
+		entries: make([]DictionaryEntry, 0),
 	}
 }
 
+// handleMethodNotAllowed envoie une réponse d'erreur si la méthode HTTP n'est pas autorisée.
 func (d *Dictionary) handleMethodNotAllowed(w http.ResponseWriter, r *http.Request, allowedMethod string) {
 	if r.Method != allowedMethod {
 		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
@@ -24,10 +33,11 @@ func (d *Dictionary) handleMethodNotAllowed(w http.ResponseWriter, r *http.Reque
 	}
 }
 
+// Add permet d'ajouter une nouvelle entrée au dictionnaire.
 func (d *Dictionary) Add(w http.ResponseWriter, r *http.Request) {
 	d.handleMethodNotAllowed(w, r, http.MethodPost)
 
-	var entry map[string]string
+	var entry DictionaryEntry
 	if err := json.NewDecoder(r.Body).Decode(&entry); err != nil {
 		http.Error(w, "Erreur lors de la lecture du corps de la requête", http.StatusBadRequest)
 		return
@@ -35,10 +45,11 @@ func (d *Dictionary) Add(w http.ResponseWriter, r *http.Request) {
 
 	d.mu.Lock()
 	defer d.mu.Unlock()
-	d.entries[entry["mot"]] = entry["definition"]
+	d.entries = append(d.entries, entry)
 	w.WriteHeader(http.StatusCreated)
 }
 
+// Get permet de récupérer la définition d'un mot spécifique dans le dictionnaire.
 func (d *Dictionary) Get(w http.ResponseWriter, r *http.Request) {
 	d.handleMethodNotAllowed(w, r, http.MethodGet)
 
@@ -47,16 +58,18 @@ func (d *Dictionary) Get(w http.ResponseWriter, r *http.Request) {
 	d.mu.RLock()
 	defer d.mu.RUnlock()
 
-	definition, exists := d.entries[word]
-	if !exists {
-		http.Error(w, "Mot non trouvé", http.StatusNotFound)
-		return
+	for _, entry := range d.entries {
+		if entry.Mot == word {
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(entry)
+			return
+		}
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"mot": word, "definition": definition})
+	http.Error(w, "Mot non trouvé", http.StatusNotFound)
 }
 
+// Remove permet de supprimer une entrée du dictionnaire en fonction du mot.
 func (d *Dictionary) Remove(w http.ResponseWriter, r *http.Request) {
 	d.handleMethodNotAllowed(w, r, http.MethodDelete)
 
@@ -64,22 +77,27 @@ func (d *Dictionary) Remove(w http.ResponseWriter, r *http.Request) {
 
 	d.mu.Lock()
 	defer d.mu.Unlock()
-	delete(d.entries, word)
-	w.WriteHeader(http.StatusOK)
+
+	for i, entry := range d.entries {
+		if entry.Mot == word {
+			// Supprimer l'entrée en la retirant de la slice
+			d.entries = append(d.entries[:i], d.entries[i+1:]...)
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+	}
+
+	// Si la boucle se termine sans trouver l'entrée, renvoyer une erreur
+	http.Error(w, "Mot non trouvé", http.StatusNotFound)
 }
 
+// List renvoie la liste complète des entrées du dictionnaire.
 func (d *Dictionary) List(w http.ResponseWriter, r *http.Request) {
 	d.handleMethodNotAllowed(w, r, http.MethodGet)
 
 	d.mu.RLock()
 	defer d.mu.RUnlock()
 
-	var entries []map[string]string
-	for word, definition := range d.entries {
-		entry := map[string]string{"mot": word, "definition": definition}
-		entries = append(entries, entry)
-	}
-
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(entries)
+	json.NewEncoder(w).Encode(d.entries)
 }
