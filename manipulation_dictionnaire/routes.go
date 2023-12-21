@@ -8,4 +8,6 @@ func SetupRoutes(dictionary *Dictionary) {
 	http.HandleFunc("/get", dictionary.Get)
 	http.HandleFunc("/remove", dictionary.Remove)
 	http.HandleFunc("/list", dictionary.List)
+	http.HandleFunc("/removeall", dictionary.RemoveAll)
+
 }

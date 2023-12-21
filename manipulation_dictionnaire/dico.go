@@ -91,6 +91,18 @@ func (d *Dictionary) Remove(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Mot non trouvé", http.StatusNotFound)
 }
 
+// RemoveAll permet de supprimer toute la liste du dictionnaire.
+func (d *Dictionary) RemoveAll(w http.ResponseWriter, r *http.Request) {
+	d.handleMethodNotAllowed(w, r, http.MethodDelete)
+
+	d.mu.Lock()
+	defer d.mu.Unlock()
+
+	// Réinitialiser la slice à une slice vide
+	d.entries = make([]DictionaryEntry, 0)
+	w.WriteHeader(http.StatusOK)
+}
+
 // List renvoie la liste complète des entrées du dictionnaire.
 func (d *Dictionary) List(w http.ResponseWriter, r *http.Request) {
 	d.handleMethodNotAllowed(w, r, http.MethodGet)
