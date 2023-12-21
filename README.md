@@ -67,4 +67,4 @@ Les contributions sont les bienvenues ! Si vous souhaitez améliorer ce projet, 
 
 ## Auteurs
 
-- [MESSIA DOLIVEUX Lucas - DINSPEL Ludwig.Jr]
+- [MESSIA DOLIVEUX Lucas -]
