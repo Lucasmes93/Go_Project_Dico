@@ -65,6 +65,6 @@ Le serveur sera en cours d'exécution sur le port 8080. Vous pouvez maintenant u
 
 Les contributions sont les bienvenues ! Si vous souhaitez améliorer ce projet, n'hésitez pas à ouvrir une pull request.
 
-## Auteur
+## Auteurs
 
-- [MESSIA DOLIVEUX Lucas]
+- [MESSIA DOLIVEUX Lucas - DINSPEL Ludwig.Jr]
