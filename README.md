@@ -95,38 +95,13 @@ Si le serveur est redémarré, il recharge les données sauvegardées.
 Lorsque le serveur est arrêté (CTRL+C), une sauvegarde automatique est effectuée.
 Toutes les données sont enregistrées dans data/dico.json avant l'arrêt.
 
-💡 Comment Contribuer ?
-Les contributions sont les bienvenues ! 🎉
-
-📌 1. Forker le projet
-sh
-Copier
-Modifier
-git clone https://github.com/Lucasmes93/Go_Project_Dico.git
-📌 2. Créer une nouvelle branche
-sh
-Copier
-Modifier
-git checkout -b feature-nouvelle-fonctionnalité
-📌 3. Ajouter tes modifications
-sh
-Copier
-Modifier
-git add .
-git commit -m "Ajout de la fonctionnalité XYZ"
-📌 4. Pousser les modifications
-sh
-Copier
-Modifier
-git push origin feature-nouvelle-fonctionnalité
-📌 5. Créer une Pull Request
-Va sur GitHub et propose ta modification via une Pull Request.
 
 🛠 Technologies Utilisées
 Langage : Go 1.24.0
 Base de données : Fichier JSON (persistance des mots)
 Framework HTTP : net/http
 Gestion des concurrents : sync.RWMutex
+
 📝 Licence
 Ce projet est sous licence MIT.
 Tu es libre de l’utiliser, le modifier et le distribuer. 😊
@@ -134,6 +109,7 @@ Tu es libre de l’utiliser, le modifier et le distribuer. 😊
 👨‍💻 Développeur
 📌 Développé par : MESSIA DOLIVEUX Lucas
 📂 Dépôt GitHub : Go_Project_Dico
-📧 Email : lucas@example.com
 
 🔥 Merci d’utiliser le projet Dictionnaire en Go ! 🚀
+Si tu as des suggestions ou des améliorations, n’hésite pas à me contacter ! 😊
+
