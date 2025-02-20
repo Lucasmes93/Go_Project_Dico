@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"Go_Project_Dico/manipulation_dictionnaire"
@@ -11,7 +11,8 @@ import (
 	"time"
 )
 
-func gracefulShutdown(server *http.Server, dictionary *manipulation_dictionnaire.Dictionary) {
+// ✅ Fonction exportée (nom avec majuscule)
+func GracefulShutdown(server *http.Server, dictionary *manipulation_dictionnaire.Dictionary) {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 

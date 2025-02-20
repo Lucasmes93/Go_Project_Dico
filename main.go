@@ -2,6 +2,7 @@ package main
 
 import (
 	"Go_Project_Dico/manipulation_dictionnaire"
+	"Go_Project_Dico/server" // ✅ Import du package server
 	"log"
 	"net/http"
 	"time"
@@ -24,7 +25,7 @@ func main() {
 	muxWithLogging := loggingMiddleware(mux)
 	muxWithCORS := corsMiddleware(muxWithLogging)
 
-	server := &http.Server{
+	serverInstance := &http.Server{
 		Addr:         ":8080",
 		Handler:      muxWithCORS,
 		ReadTimeout:  10 * time.Second,
@@ -34,9 +35,10 @@ func main() {
 
 	log.Printf("🚀 Serveur démarré sur http://localhost:%d\n", port)
 
-	go gracefulShutdown(server, dictionary)
+	// ✅ Utilisation correcte de gracefulShutdown depuis server.go
+	go server.GracefulShutdown(serverInstance, dictionary)
 
-	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+	if err := serverInstance.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatalf("❌ Erreur serveur: %s", err)
 	}
 }
