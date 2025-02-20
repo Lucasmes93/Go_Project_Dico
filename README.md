@@ -1,70 +1,139 @@
-# Projet Dictionnaire en Go
+📖 Projet Dictionnaire en Go
+🚀 Dictionnaire en Go 1.24.0 : Une API REST permettant d'ajouter, modifier, rechercher et supprimer des mots dans un dictionnaire, avec persistance des données et gestion des accès concurrents.
 
-Ce projet implémente un serveur HTTP en Go pour la manipulation d'un dictionnaire. Le dictionnaire est géré à l'aide de trois fichiers principaux : `main.go`, `manipulation_dictionnaire/dictionary.go`, et `manipulation_dictionnaire/routes.go`. Le serveur expose des endpoints pour ajouter des mots, récupérer des définitions, supprimer des mots, et lister tous les mots du dictionnaire.
+📌 Développé par : MESSIA DOLIVEUX Lucas
+📂 Dépôt GitHub : Go_Project_Dico
 
-## Structure du Projet
 
-- **main.go**: Fichier principal du projet contenant la fonction `main`. Il initialise le dictionnaire, configure les routes, et démarre le serveur HTTP.
+🌟 Fonctionnalités
+✅ Ajout de mots avec leur définition
+✅ Modification des définitions
+✅ Suppression de mots
+✅ Liste complète des mots enregistrés
+✅ Recherche avancée de mots (supporte la recherche partielle)
+✅ Compteur du nombre total de mots
+✅ Persistance des données (fichier JSON)
+✅ Gestion avancée des routes et méthodes HTTP
+✅ Arrêt propre du serveur avec sauvegarde automatique
+✅ Middleware CORS et Logging
+✅ Route /health pour vérifier l’état du serveur
 
-- **manipulation_dictionnaire/dictionary.go**: Contient la définition du type `Dictionary` et les fonctions associées pour ajouter, récupérer, supprimer et lister des entrées dans le dictionnaire.
+🔧 Prérequis
+Avant de commencer, assure-toi d’avoir installé Go 1.24.0 ou une version supérieure.
 
-- **manipulation_dictionnaire/routes.go**: Configure les routes du serveur HTTP pour les opérations du dictionnaire, telles que l'ajout, la récupération, la suppression et la liste.
+Vérifier la version installée :
 
-## Fonctionnalités
+sh
+Copier
+Modifier
+go version
+🚀 Installation et Démarrage
+1️⃣ Cloner le dépôt
+sh
+Copier
+Modifier
+git clone https://github.com/Lucasmes93/Go_Project_Dico.git
+cd Go_Project_Dico
+2️⃣ Initialiser les dépendances
+sh
+Copier
+Modifier
+go mod tidy
+3️⃣ Lancer le serveur
+sh
+Copier
+Modifier
+go run main.go
+Le serveur est accessible à l’adresse http://localhost:8080.
 
-### Ajout d'un Mot et d'une Définition
+📡 Routes API
+📍 Routes CRUD
+Méthode	Route	Description
+POST	/add	Ajoute un mot avec sa définition
+PUT	/update	Modifie un mot existant
+DELETE	/remove?mot=<mot>	Supprime un mot
+GET	/list	Liste tous les mots
+📍 Routes avancées
+Méthode	Route	Description
+GET	/search?query=<mot>	Recherche un mot (supporte la recherche partielle)
+GET	/count	Compte le nombre total de mots
+GET	/health	Vérifie l’état du serveur
+🛠️ Exemples d’Utilisation
+Ajouter un mot
+sh
+Copier
+Modifier
+curl -X POST http://localhost:8080/add -d '{"mot":"chat", "definition":"Petit félin domestique"}' -H "Content-Type: application/json"
+Modifier un mot
+sh
+Copier
+Modifier
+curl -X PUT http://localhost:8080/update -d '{"mot":"chat", "definition":"Félin domestique affectueux"}' -H "Content-Type: application/json"
+Rechercher un mot (supporte la recherche partielle)
+sh
+Copier
+Modifier
+curl -X GET "http://localhost:8080/search?query=cha"
+Supprimer un mot
+sh
+Copier
+Modifier
+curl -X DELETE "http://localhost:8080/remove?mot=chat"
+Lister tous les mots
+sh
+Copier
+Modifier
+curl -X GET "http://localhost:8080/list"
+💾 Persistance des Données
+Les mots sont enregistrés dans le fichier data/dico.json.
+Toutes les modifications sont automatiquement sauvegardées.
 
-Utilisez la route `/add` pour ajouter un mot avec sa définition. Exemple en utilisant curl :
+💡 Reprise après arrêt :
+Si le serveur est redémarré, il recharge les données sauvegardées.
 
-```bash
-curl -X POST -d '{"mot": "example", "definition": "This is an example."}' http://localhost:8080/add
-```
+🛑 Arrêt propre du serveur
+Lorsque le serveur est arrêté (CTRL+C), une sauvegarde automatique est effectuée.
+Toutes les données sont enregistrées dans data/dico.json avant l'arrêt.
 
-### Récupération de la Définition d'un Mot
+💡 Comment Contribuer ?
+Les contributions sont les bienvenues ! 🎉
 
-Utilisez la route `/get` pour récupérer la définition d'un mot. Exemple en utilisant curl :
+📌 1. Forker le projet
+sh
+Copier
+Modifier
+git clone https://github.com/Lucasmes93/Go_Project_Dico.git
+📌 2. Créer une nouvelle branche
+sh
+Copier
+Modifier
+git checkout -b feature-nouvelle-fonctionnalité
+📌 3. Ajouter tes modifications
+sh
+Copier
+Modifier
+git add .
+git commit -m "Ajout de la fonctionnalité XYZ"
+📌 4. Pousser les modifications
+sh
+Copier
+Modifier
+git push origin feature-nouvelle-fonctionnalité
+📌 5. Créer une Pull Request
+Va sur GitHub et propose ta modification via une Pull Request.
 
-```bash
-curl http://localhost:8080/get?mot=example
-```
+🛠 Technologies Utilisées
+Langage : Go 1.24.0
+Base de données : Fichier JSON (persistance des mots)
+Framework HTTP : net/http
+Gestion des concurrents : sync.RWMutex
+📝 Licence
+Ce projet est sous licence MIT.
+Tu es libre de l’utiliser, le modifier et le distribuer. 😊
 
-### Suppression d'un Mot
+👨‍💻 Développeur
+📌 Développé par : MESSIA DOLIVEUX Lucas
+📂 Dépôt GitHub : Go_Project_Dico
+📧 Email : lucas@example.com
 
-Utilisez la route `/remove` pour supprimer un mot du dictionnaire. Exemple en utilisant curl :
-
-```bash
-curl -X DELETE http://localhost:8080/remove?mot=example
-```
-
-### Liste de Tous les Mots
-
-Utilisez la route `/list` pour obtenir une liste de tous les mots du dictionnaire. Exemple en utilisant curl :
-
-```bash
-curl http://localhost:8080/list
-```
-
-## Installation et Utilisation
-
-1. **Prérequis**: Assurez-vous que Go est installé sur votre système. Si ce n'est pas le cas, suivez les instructions d'installation sur [golang.org](https://golang.org/doc/install).
-
-2. **Clonage du Dépôt**:
-   ```bash
-   git clone https://github.com/Lucasmes93/Go_Project_Dico.git
-   cd Go_Project_Dico
-    ```
-
-3. **Exécution du Programme**:
-   ```bash
-   go run main.go
-   ```
-
-Le serveur sera en cours d'exécution sur le port 8080. Vous pouvez maintenant utiliser les routes mentionnées ci-dessus pour manipuler le dictionnaire.
-
-## Contributions
-
-Les contributions sont les bienvenues ! Si vous souhaitez améliorer ce projet, n'hésitez pas à ouvrir une pull request.
-
-## Auteurs
-
-- [MESSIA DOLIVEUX Lucas -]
+🔥 Merci d’utiliser le projet Dictionnaire en Go ! 🚀
